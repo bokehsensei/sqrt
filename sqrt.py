@@ -1,6 +1,6 @@
-#!/usr/bin/env python3.3
+#!/usr/bin/env python
 
-from itertools import *
+from collections import Counter
 
 def sqrt(N, num_digits=100):
         """
@@ -33,7 +33,7 @@ def sqrt(N, num_digits=100):
 
         """
         if N < 0:
-            raise Exception('invalid input: negative number')
+            raise ValueError('invalid input: negative number')
         if N == 0:
             return 0
 
@@ -57,8 +57,6 @@ def sqrt(N, num_digits=100):
             N_10_k2 = N*100
             k = 1
             while k < num_digits:
-                # C = 100*E*E - N_10_k2
-                # E20 = 20*E
                 C = 100*E*E - N_10_k2
                 E20 = 20*E
                 for x in range(9, -1, -1):
@@ -88,18 +86,22 @@ def random(n):
             digits += [x]
     return digits
 
+def variability(digit, min_digits, max_digits):
+    var = []
+    for digits in range(min_digits, max_digits, 10):
+        p = Counter(sqrt(2, digits)[1])
+        var.append( (p[digit] - (digits//10))/(digits//10) )
 
-def probability_per_digit(digits):
-    p = dict( [ (i,0) for i in range(10) ] )
-    for digit in digits:
-        p[digit] += 1 
-    return p
+    return list(range(min_digits, max_digits, 10)), var
 
+
+#print(sqrt(2))
 #print( sqrt( 11 ) )
 #print( sqrt( 123 ) )
 
 #print('probability per digit:')
-print( probability_per_digit(sqrt(2, 1000)[1]))
+#print( Counter(sqrt(2, 1000)[1]))
+#print( Counter(sqrt(2, 10000)[1]))
 
 #print( random(50) )
 #print( [ x for x in islice(random(), start=0, stop=10) ] )
